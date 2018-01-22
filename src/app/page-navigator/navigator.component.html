@@ -1,0 +1,7 @@
+<div class="page-navigator">
+  <ul class="anchor-list">
+    <li class="anchor-item" *ngFor="let anchor of anchorService.anchors; trackBy: trackByFn" [class.active]="anchor.id === anchorService.activeAnchor.id" (click)="handleClick(anchor)">
+      <span>{{anchor.id}}</span>
+    </li>
+  </ul>
+</div>

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core'
 import { AppComponent } from './app.component'
 import { PageNavigatorModule } from './page-navigator/page-navigator.module'
 
+import { NgZorroAntdModule } from 'ng-zorro-antd'
 
 @NgModule({
   declarations: [
@@ -11,6 +12,7 @@ import { PageNavigatorModule } from './page-navigator/page-navigator.module'
   ],
   imports: [
     BrowserModule,
+    NgZorroAntdModule.forRoot(),
     PageNavigatorModule,
   ],
   providers: [],
