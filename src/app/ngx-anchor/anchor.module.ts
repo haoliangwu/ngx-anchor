@@ -1,15 +1,15 @@
-import { NgModule } from '@angular/core'
+import { NgModule, ModuleWithProviders } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { NavigatorComponent } from './navigator.component'
 import { AnchorDirective } from './anchor.directive'
 import { AnchorService } from './anchor.service'
+import { AnimationOpts } from 'utils/scroll'
+
+
 
 @NgModule({
   imports: [
     CommonModule
-  ],
-  providers: [
-    AnchorService
   ],
   declarations: [
     NavigatorComponent,
@@ -20,4 +20,18 @@ import { AnchorService } from './anchor.service'
     AnchorDirective
   ]
 })
-export class NgxAnchorModule { }
+export class NgxAnchorModule {
+  static forRoot(options?: AnimationOpts): ModuleWithProviders {
+    return {
+      ngModule: NgxAnchorModule,
+      providers: [
+        {
+          provide: AnchorService,
+          useFactory: function () {
+            return new AnchorService(options)
+          },
+        }
+      ]
+    }
+  }
+}

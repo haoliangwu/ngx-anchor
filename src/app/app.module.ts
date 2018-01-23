@@ -13,7 +13,7 @@ import { NgZorroAntdModule } from 'ng-zorro-antd'
   imports: [
     BrowserModule,
     NgZorroAntdModule.forRoot(),
-    NgxAnchorModule
+    NgxAnchorModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

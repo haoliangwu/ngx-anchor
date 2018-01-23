@@ -9,7 +9,11 @@
   </div>
   <div nz-col [nzSpan]="6">
     <nz-affix>
-      <ngx-anchor-nav></ngx-anchor-nav>
+      <ngx-anchor-nav>
+        <ng-template #anchorTpl let-index="id">
+          <span>{{index}}</span>
+        </ng-template>
+      </ngx-anchor-nav>
     </nz-affix>
   </div>
 </div>

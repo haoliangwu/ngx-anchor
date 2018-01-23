@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core'
+import { Component, OnInit, ViewEncapsulation, OnDestroy, TemplateRef, ContentChild, ElementRef } from '@angular/core'
 import { AnchorService } from './anchor.service'
 import { getElementViewTop, isScrollToBottom } from '../utils/dom'
 import { Anchor } from './model'
 
 import { Subscription } from 'rxjs/Subscription'
+import { AfterContentInit } from '@angular/core/src/metadata/lifecycle_hooks'
 
 @Component({
   selector: 'ngx-anchor-nav',
@@ -14,6 +15,8 @@ import { Subscription } from 'rxjs/Subscription'
 export class NavigatorComponent implements OnInit, OnDestroy {
   private scroll$$: Subscription
   private isClosed = false
+
+  @ContentChild('anchorTpl', { read: TemplateRef }) itemTpl: TemplateRef<Anchor>
 
   constructor(
     private anchorService: AnchorService

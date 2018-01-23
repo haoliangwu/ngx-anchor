@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Anchor } from './model'
 import { getElementViewTop, closestScrollableElement, isScrollToBottom } from 'utils/dom'
-import { scrollTo } from 'utils/scroll'
+import { scrollTo, AnimationOpts } from 'utils/scroll'
 
 import { fromEvent } from 'rxjs/observable/fromEvent'
 import { of } from 'rxjs/observable/of'
@@ -16,6 +16,10 @@ export class AnchorService {
   anchors: Anchor[] = []
   activeAnchor: Anchor
   sensitivity = 30
+
+  constructor(public options: AnimationOpts) {
+    this.options = options
+  }
 
   registerAnchor(el: HTMLElement) {
     const id = this.uniqId++
@@ -38,7 +42,7 @@ export class AnchorService {
     return top >= 0 && top <= (clientHeight + this.sensitivity)
   }
 
-  scrollToAnchor(anchor: Anchor) {
+  scrollToAnchor(anchor: Anchor, options?: AnimationOpts) {
     this.toggleListner(false)
 
     const scrollElement = closestScrollableElement(anchor.el)
@@ -49,9 +53,8 @@ export class AnchorService {
     scrollTo(scrollElement, {
       start: scrollTop,
       change: scrollOffset,
-      timeFunc: function easeOut(step, start, change, duration) {
-        return -change * (step /= duration) * (step - 2) + start
-      }
+      ...this.options,
+      ...options
     }, () => {
       this.toggleListner(true)
     })
@@ -83,7 +86,7 @@ export class AnchorService {
     )
   }
 
-  toggleListner(status: boolean) {
+  private toggleListner(status: boolean) {
     this.enable = status
   }
 }

@@ -2,19 +2,26 @@ import { isScrollToBottom } from './dom'
 
 let scrollAnimationFrame
 
-interface ScrollOpts {
-  start: number,
-  change: number,
+export type animationFunc = (step: number, start: number, change: number, duration: number) => number
+
+export interface AnimationOpts {
   duration?: number,
   step?: number,
-  timeFunc: (step: number, start: number, change: number, duration: number) => number
+  timeFunc?: animationFunc
+}
+
+interface ScrollOpts extends AnimationOpts {
+  start: number,
+  change: number
 }
 
 function easeOut(step: number, start: number, change: number, duration: number): number {
   return -change * (step /= duration) * (step - 2) + start
 }
 
-export function scrollTo(scrollElement: HTMLElement, options: ScrollOpts, callback: Function) {
+export function scrollTo(scrollElement: HTMLElement,
+  options: ScrollOpts, callback: Function) {
+
   const { start, change, duration = 300, step = 10, timeFunc = easeOut } = options
 
   let t = 0
