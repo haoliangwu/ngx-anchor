@@ -1,16 +1,25 @@
 {
-  "name": "ngx-page-navigator",
+  "name": "ngx-anchor",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "ngc": "ngc",
+    "compile": "npm run compile:js && npm run compile:assets",
+    "compile:js": "ngc -p src/tsconfig.build.json",
+    "compile:assets": "gulp",
+    "package": "rollup -c src/rollup.config.js",
+    "minify": "uglifyjs lib/ngx-anchor.umd.js --screw-ie8 --compress --mangle --comments --output lib/ngx-anchor.umd.min.js",
+    "build": "rm -rf ./lib && npm run compile && npm run package && npm run minify",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
   "private": true,
+  "main": "./lib/ngx-anchor.umd.js",
+  "module": "./lib/app/index.js",
+  "typings": "./lib/app/index.d.ts",
   "dependencies": {
     "@angular-devkit/core": "0.0.28",
     "@angular/animations": "^5.0.0",
@@ -34,6 +43,9 @@
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.60",
     "codelyzer": "^4.0.1",
+    "cpx": "^1.5.0",
+    "gulp": "^3.9.1",
+    "gulp-sass": "^3.1.0",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
     "karma": "~1.7.0",
@@ -44,8 +56,13 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "ng-zorro-antd": "^0.6.12",
     "protractor": "~5.1.2",
+    "rollup": "^0.54.1",
+    "rollup-plugin-node-resolve": "^3.0.2",
+    "rollup-plugin-resolve-aliases": "^0.2.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
-    "typescript": "~2.4.2"
+    "typescript": "~2.4.2",
+    "uglifyjs": "^2.4.11"
   }
 }

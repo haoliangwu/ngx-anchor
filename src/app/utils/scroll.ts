@@ -10,7 +10,7 @@ export interface AnimationOpts {
   timeFunc?: animationFunc
 }
 
-interface ScrollOpts extends AnimationOpts {
+export interface ScrollOpts extends AnimationOpts {
   start: number,
   change: number
 }

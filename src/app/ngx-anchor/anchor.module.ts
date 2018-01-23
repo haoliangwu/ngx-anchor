@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common'
 import { NavigatorComponent } from './navigator.component'
 import { AnchorDirective } from './anchor.directive'
 import { AnchorService } from './anchor.service'
-import { AnimationOpts } from 'utils/scroll'
+import { AnimationOpts } from '../utils/scroll'
 import { SCROLL_CONFIG } from './config'
 
 @NgModule({

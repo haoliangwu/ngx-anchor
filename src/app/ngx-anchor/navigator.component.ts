@@ -19,7 +19,7 @@ export class NavigatorComponent implements OnInit, OnDestroy {
   @ContentChild('anchorTpl', { read: TemplateRef }) itemTpl: TemplateRef<Anchor>
 
   constructor(
-    private anchorService: AnchorService
+    public anchorService: AnchorService
   ) { }
 
   ngOnInit() {

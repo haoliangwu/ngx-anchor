@@ -42,7 +42,7 @@ export function isScrollToBottom(element: HTMLElement = document.documentElement
   return (element.scrollTop === (element.scrollHeight - element.offsetHeight))
 }
 
-export function hasOverflow(element) {
+export function hasOverflow(element: HTMLElement) {
   const overflowRegex = /(auto|scroll)/
   const computedStyles = getComputedStyle(element, null)
 

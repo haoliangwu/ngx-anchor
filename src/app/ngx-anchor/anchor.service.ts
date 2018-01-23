@@ -1,8 +1,9 @@
 import { Injectable, Inject, InjectionToken } from '@angular/core'
 import { Anchor } from './model'
-import { getElementViewTop, closestScrollableElement, isScrollToBottom } from 'utils/dom'
-import { scrollTo, AnimationOpts } from 'utils/scroll'
+import { getElementViewTop, closestScrollableElement, isScrollToBottom } from '../utils/dom'
+import { scrollTo, AnimationOpts } from '../utils/scroll'
 
+import { Observable } from 'rxjs/Observable'
 import { fromEvent } from 'rxjs/observable/fromEvent'
 import { of } from 'rxjs/observable/of'
 import { never } from 'rxjs/observable/never'
