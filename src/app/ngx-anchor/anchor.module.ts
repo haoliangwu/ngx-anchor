@@ -4,8 +4,7 @@ import { NavigatorComponent } from './navigator.component'
 import { AnchorDirective } from './anchor.directive'
 import { AnchorService } from './anchor.service'
 import { AnimationOpts } from 'utils/scroll'
-
-
+import { SCROLL_CONFIG } from './config'
 
 @NgModule({
   imports: [
@@ -26,11 +25,10 @@ export class NgxAnchorModule {
       ngModule: NgxAnchorModule,
       providers: [
         {
-          provide: AnchorService,
-          useFactory: function () {
-            return new AnchorService(options)
-          },
-        }
+          provide: SCROLL_CONFIG,
+          useValue: options
+        },
+        AnchorService,
       ]
     }
   }

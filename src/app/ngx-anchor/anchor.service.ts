@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, Inject, InjectionToken } from '@angular/core'
 import { Anchor } from './model'
 import { getElementViewTop, closestScrollableElement, isScrollToBottom } from 'utils/dom'
 import { scrollTo, AnimationOpts } from 'utils/scroll'
@@ -8,18 +8,22 @@ import { of } from 'rxjs/observable/of'
 import { never } from 'rxjs/observable/never'
 import { from } from 'rxjs/observable/from'
 import { debounceTime, flatMap, tap, map, bufferCount, switchMap, distinctUntilChanged } from 'rxjs/operators'
+import { SCROLL_CONFIG } from './config'
 
 @Injectable()
 export class AnchorService {
   private uniqId = 1
   private enable = true
+  public options
   anchors: Anchor[] = []
   activeAnchor: Anchor
   sensitivity = 30
 
-  constructor(public options: AnimationOpts) {
+  constructor(
+    @Inject(SCROLL_CONFIG) options
+  ) {
     this.options = options
-  }
+   }
 
   registerAnchor(el: HTMLElement) {
     const id = this.uniqId++
