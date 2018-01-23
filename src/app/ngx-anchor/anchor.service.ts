@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core'
 import { Anchor } from './model'
-import { getElementViewTop, scrollTo, closestScrollableElement, isScrollToBottom } from './utils'
+import { getElementViewTop, closestScrollableElement, isScrollToBottom } from 'utils/dom'
+import { scrollTo } from 'utils/scroll'
 
 import { fromEvent } from 'rxjs/observable/fromEvent'
 import { of } from 'rxjs/observable/of'
 import { never } from 'rxjs/observable/never'
 import { from } from 'rxjs/observable/from'
-import { debounceTime, flatMap, tap, map, bufferCount, switchMap } from 'rxjs/operators'
+import { debounceTime, flatMap, tap, map, bufferCount, switchMap, distinctUntilChanged } from 'rxjs/operators'
 
 @Injectable()
 export class AnchorService {
@@ -63,6 +64,7 @@ export class AnchorService {
 
     return fromEvent(el, 'scroll').pipe(
       toggle$,
+      distinctUntilChanged(),
       map(event => {
         const length = this.anchors.length
 

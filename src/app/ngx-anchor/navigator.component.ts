@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core'
 import { AnchorService } from './anchor.service'
-import { getElementViewTop, isScrollToBottom } from './utils'
+import { getElementViewTop, isScrollToBottom } from '../utils/dom'
 import { Anchor } from './model'
 
 import { Subscription } from 'rxjs/Subscription'
 
 @Component({
-  selector: 'pn-navigator',
+  selector: 'ngx-anchor-nav',
   encapsulation: ViewEncapsulation.None,
   templateUrl: './navigator.component.html',
   styleUrls: ['./navigator.component.scss']

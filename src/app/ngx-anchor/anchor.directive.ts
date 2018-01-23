@@ -1,10 +1,10 @@
 import { Directive, ElementRef } from '@angular/core'
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks'
-import { getElementTop, getElementViewTop } from './utils'
+import { getElementTop, getElementViewTop } from '../utils/dom'
 import { AnchorService } from './anchor.service'
 
 @Directive({
-  selector: '[pnAnchor]'
+  selector: '[ngxAnchor]'
 })
 export class AnchorDirective implements OnInit {
   constructor(

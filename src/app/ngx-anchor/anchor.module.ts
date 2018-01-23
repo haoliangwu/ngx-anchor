@@ -20,4 +20,4 @@ import { AnchorService } from './anchor.service'
     AnchorDirective
   ]
 })
-export class PageNavigatorModule { }
+export class NgxAnchorModule { }

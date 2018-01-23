@@ -1,7 +1,7 @@
 <div nz-row [nzType]="'flex'">
   <div nz-col [nzSpan]="18" class="page-wrapper">
     <ng-container *ngFor="let content of contents; index as i;">
-      <h1 pnAnchor>main title{{i+1}}</h1>
+      <h1 ngxAnchor>main title{{i+1}}</h1>
       <section class="whole-page">
         long content{{i+1}}
       </section>
@@ -9,7 +9,7 @@
   </div>
   <div nz-col [nzSpan]="6">
     <nz-affix>
-      <pn-navigator></pn-navigator>
+      <ngx-anchor-nav></ngx-anchor-nav>
     </nz-affix>
   </div>
 </div>
