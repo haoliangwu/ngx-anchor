@@ -1,11 +1,12 @@
 import { NgModule, ModuleWithProviders } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { NavigatorComponent } from './navigator.component'
+import { NavigatorComponent } from './navigator/navigator.component'
+import { NavigatorItemComponent } from './navigator/navigator-item.component'
 import { AnchorDirective } from './anchor.directive'
 import { AnchorService } from './anchor.service'
 import { SCROLL_CONFIG } from './config'
 import { AnchorScrollConfig } from './model'
-import { ValuesPipe } from './values.pipe'
+import { ValuesPipe } from './pipes/values.pipe'
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { ValuesPipe } from './values.pipe'
   ],
   declarations: [
     NavigatorComponent,
+    NavigatorItemComponent,
     AnchorDirective,
     ValuesPipe
   ],

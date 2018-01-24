@@ -1,0 +1,12 @@
+<ul class="anchor-list" [class.sub]="sub">
+  <ng-container *ngFor="let anchor of anchors | values; trackBy: trackByFn">
+    <li class="anchor-item" [class.active]="anchor.id === anchorService.activeAnchor.id" (click)="handleClick(anchor)">
+      <ng-container *ngTemplateOutlet="itemTpl; context:anchor">
+      </ng-container>
+    </li>
+    <li class="anchor-item" *ngIf="anchor.children && anchor.children.length > 0">
+      <ngx-navigator-item [sub]="true" [anchors]="anchor.children" [itemTpl]="itemTpl" (clickRquest)="handleClick($event)">
+      </ngx-navigator-item>
+    </li>
+  </ng-container>
+</ul>

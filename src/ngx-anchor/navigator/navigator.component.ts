@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, OnDestroy, TemplateRef, ContentChild, ElementRef } from '@angular/core'
-import { AnchorService } from './anchor.service'
-import { getElementViewTop, isScrollToBottom } from '../utils/dom'
-import { Anchor } from './model'
+import { AnchorService } from '../anchor.service'
+import { getElementViewTop, isScrollToBottom } from '../../utils/dom'
+import { Anchor } from '../model'
 
 import { Subscription } from 'rxjs/Subscription'
 import { AfterContentInit } from '@angular/core/src/metadata/lifecycle_hooks'

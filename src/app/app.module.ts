@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core'
 import { AppComponent } from './app.component'
 import { NgxAnchorModule } from '../ngx-anchor/anchor.module'
 
-import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { NgZorroAntdModule } from 'ng-zorro-antd'
 
 @NgModule({
   declarations: [
