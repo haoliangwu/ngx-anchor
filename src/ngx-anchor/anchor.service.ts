@@ -24,7 +24,7 @@ export class AnchorService {
     @Inject(SCROLL_CONFIG) options
   ) {
     this.options = options
-   }
+  }
 
   registerAnchor(el: HTMLElement) {
     const id = this.uniqId++
@@ -40,11 +40,12 @@ export class AnchorService {
     this.anchors.push(anchor)
   }
 
-  isActiveAnchor(el: HTMLElement) {
-    const top = getElementViewTop(el)
-    const clientHeight = el.clientHeight
+  isAnchorInView(top: number) {
+    return top >= 0 && top <= document.documentElement.clientHeight
+  }
 
-    return top >= 0 && top <= (clientHeight + this.sensitivity)
+  isAnchorActive(top: number, height: number) {
+    return top >= 0 && top <= height + this.sensitivity
   }
 
   scrollToAnchor(anchor: Anchor, options?: AnimationOpts) {
@@ -76,17 +77,35 @@ export class AnchorService {
       map(event => {
         const length = this.anchors.length
 
+        // 如果滚动到最底端 则直接返回最后一个 anchor
         if (isScrollToBottom()) {
-          return this.anchors.slice(length - 1)
+          return this.anchors[this.anchors.length - 1]
         }
 
-        return this.anchors
-          .filter((anchor) => this.isActiveAnchor(anchor.el))
-      }),
-      tap(activeAnchors => {
-        if (activeAnchors.length > 0) {
-          this.activeAnchor = activeAnchors[0]
+        let anchor: Anchor = null
+
+        for (let i = 0; i < this.anchors.length; i++) {
+          anchor = this.anchors[i]
+
+          const top = getElementViewTop(anchor.el)
+          const clientHeight = anchor.el.clientHeight
+
+          // 如果 anchor 可见
+          if (this.isAnchorInView(top)) {
+            // 如果 anchor 距窗口顶部距离大于 sensitivity，则返回上一条 anchor
+            if (!this.isAnchorActive(top, clientHeight)) {
+              anchor = this.anchors[i - 1]
+            }
+
+            // 反之 返回当前 anchor
+            break
+          }
         }
+
+        return anchor
+      }),
+      tap(activeAnchor => {
+        this.activeAnchor = activeAnchor
       })
     )
   }
