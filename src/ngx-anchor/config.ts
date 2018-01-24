@@ -1,4 +1,4 @@
 import { InjectionToken } from '@angular/core'
-import { AnimationOpts } from '../utils/scroll'
+import { AnchorScrollConfig } from './model';
 
-export const SCROLL_CONFIG = new InjectionToken<AnimationOpts>('scroll.config')
+export const SCROLL_CONFIG = new InjectionToken<AnchorScrollConfig>('scroll.config')

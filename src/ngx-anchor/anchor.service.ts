@@ -1,7 +1,7 @@
 import { Injectable, Inject, InjectionToken } from '@angular/core'
 import { Anchor, AnchorScrollConfig } from './model'
 import { getElementViewTop, closestScrollableElement, isScrollToBottom } from '../utils/dom'
-import { scrollTo, AnimationOpts } from '../utils/scroll'
+import { scrollTo } from '../utils/scroll'
 
 import { Observable } from 'rxjs/Observable'
 import { fromEvent } from 'rxjs/observable/fromEvent'
@@ -49,7 +49,7 @@ export class AnchorService {
     return top >= 0 && top <= height + sensitivity
   }
 
-  scrollToAnchor(anchor: Anchor, scrollOptions?: AnimationOpts) {
+  scrollToAnchor(anchor: Anchor, scrollOptions?: AnchorScrollConfig) {
     this.toggleListner(false)
 
     const scrollElement = closestScrollableElement(anchor.el)
