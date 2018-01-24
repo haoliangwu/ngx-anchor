@@ -1,5 +1,5 @@
 import { Injectable, Inject, InjectionToken } from '@angular/core'
-import { Anchor } from './model'
+import { Anchor, AnchorScrollConfig } from './model'
 import { getElementViewTop, closestScrollableElement, isScrollToBottom } from '../utils/dom'
 import { scrollTo, AnimationOpts } from '../utils/scroll'
 
@@ -15,15 +15,14 @@ import { SCROLL_CONFIG } from './config'
 export class AnchorService {
   private uniqId = 1
   private enable = true
-  public options
+  public scrollOptions: AnchorScrollConfig
   anchors: Anchor[] = []
   activeAnchor: Anchor
-  sensitivity = 30
 
   constructor(
-    @Inject(SCROLL_CONFIG) options
+    @Inject(SCROLL_CONFIG) scrollOptions
   ) {
-    this.options = options
+    this.scrollOptions = scrollOptions
   }
 
   registerAnchor(el: HTMLElement) {
@@ -45,10 +44,12 @@ export class AnchorService {
   }
 
   isAnchorActive(top: number, height: number) {
-    return top >= 0 && top <= height + this.sensitivity
+    const { sensitivity } = this.scrollOptions
+
+    return top >= 0 && top <= height + sensitivity
   }
 
-  scrollToAnchor(anchor: Anchor, options?: AnimationOpts) {
+  scrollToAnchor(anchor: Anchor, scrollOptions?: AnimationOpts) {
     this.toggleListner(false)
 
     const scrollElement = closestScrollableElement(anchor.el)
@@ -59,8 +60,8 @@ export class AnchorService {
     scrollTo(scrollElement, {
       start: scrollTop,
       change: scrollOffset,
-      ...this.options,
-      ...options
+      ...this.scrollOptions,
+      ...scrollOptions
     }, () => {
       this.toggleListner(true)
     })

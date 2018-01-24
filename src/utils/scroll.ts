@@ -1,16 +1,9 @@
 import { isScrollToBottom } from './dom'
+import { AnchorScrollConfig } from '../ngx-anchor/model';
 
 let scrollAnimationFrame
 
-export type animationFunc = (step: number, start: number, change: number, duration: number) => number
-
-export interface AnimationOpts {
-  duration?: number,
-  step?: number,
-  timeFunc?: animationFunc
-}
-
-export interface ScrollOpts extends AnimationOpts {
+export interface ScrollOpts extends AnchorScrollConfig {
   start: number,
   change: number
 }
