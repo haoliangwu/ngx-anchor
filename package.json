@@ -3,18 +3,12 @@
   "version": "0.1.0",
   "license": "MIT",
   "scripts": {
-    "ngc": "ngc",
-    "compile": "npm run compile:js && npm run compile:assets",
-    "compile:js": "ngc -p src/tsconfig.build.json",
-    "compile:assets": "gulp",
-    "package": "rollup -c rollup.config.js",
-    "minify": "uglifyjs lib/ngx-anchor.umd.js --screw-ie8 --compress --mangle --comments --output lib/ngx-anchor.umd.min.js",
-    "build": "rm -rf ./lib && npm run compile && npm run package && npm run minify",
     "ng": "ng",
     "start": "ng serve",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build": "./build.sh"
   },
   "main": "./lib/ngx-anchor.umd.js",
   "module": "./lib/index.js",
