@@ -1,13 +1,16 @@
-var gulp = require('gulp');
-var { inlineResourcesForDirectory } = require('./inline-resources');
-var sass = require('gulp-sass');
+const gulp = require('gulp');
+const { inlineResourcesForDirectory } = require('./inline-resources');
+const sass = require('gulp-sass');
+const args = require('get-gulp-args')()
+
+const moduleType = args.module
 
 const SOURCE_PATH = {
-  HTML: 'src/app/**/*.html',
+  HTML: 'src/ngx-anchor/**/*.html',
   ASSET: './src/assets/**/*',
-  SCSS: './src/app/**/*.scss'
+  SCSS: './src/ngx-anchor/**/*.scss'
 }
-const TARGET_PATH = './lib/app'
+const TARGET_PATH = moduleType === 'es2015' ? './publish/ngx-anchor' : './publish/es5/ngx-anchor'
 
 gulp.task('copy-and-inline-resource', copyHtml);
 
@@ -30,4 +33,4 @@ function inlineResource() {
   inlineResourcesForDirectory(TARGET_PATH);
 }
 
-gulp.task('default', ['copy-and-inline-resource']);
+gulp.task('compile', ['copy-and-inline-resource']);

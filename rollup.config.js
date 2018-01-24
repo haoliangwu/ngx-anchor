@@ -1,12 +1,9 @@
 import resolve from 'rollup-plugin-node-resolve';
-
+import replace from 'rollup-plugin-replace';
+import uglify from 'rollup-plugin-uglify';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 
-const pkg = require('../package.json');
-
-const name = pkg.name.replace(/-([a-z])/g, (g) => {
-  return g[1].toUpperCase();
-});
+const target = process.env.ROLLUP_TARGET || 'esm';
 
 const globals = {
   '@angular/animations': 'ng.animations',
@@ -157,28 +154,33 @@ const globals = {
   'rxjs/operator/windowWhen': 'Rx.Observable.prototype',
   'rxjs/operator/withLatestFrom': 'Rx.Observable.prototype',
   'rxjs/operator/zip': 'Rx.Observable.prototype',
-  'rxjs/operator/zipAll': 'Rx.Observable.prototype'
+  'rxjs/operator/zipAll': 'Rx.Observable.prototype',
 };
 
-const external = Object.keys(globals);
+let plugins = [
+  sourcemaps(),
+  replace({ "import * as moment": "import moment" }),
+  resolve(),
+];
+
+switch (target) {
+  case 'esm':
+    Object.assign(globals, {
+      'tslib': 'tslib',
+    });
+    break;
+  case 'mumd':
+    plugins.push(uglify());
+    break;
+}
 
 export default {
-  external: external,
-  input: `${pkg.module}`,
   output: {
-    file: `${pkg.main}`,
-    format: 'umd',
-    name: `${name}`,
-    globals: globals,
+    name: 'ngx-anchor',
+    globals,
     sourcemap: true,
-    exports: 'named'
+    exports: 'named',
   },
-  plugins: [
-    resolve({
-      customResolveOptions: {
-        'utils/dom': 'app/utils/dom'
-      }
-    }),
-    sourcemaps()
-  ]
+  plugins,
+  external: Object.keys(globals),
 }
