@@ -1,8 +1,18 @@
 <div class="page-navigator">
   <ul class="anchor-list">
-    <li class="anchor-item" *ngFor="let anchor of anchorService.anchors; trackBy: trackByFn" [class.active]="anchor.id === anchorService.activeAnchor.id" (click)="handleClick(anchor)">
-      <!-- <span>{{anchor.id}}</span> -->
-      <ng-container *ngTemplateOutlet="itemTpl; context:anchor"></ng-container>
-    </li>
+    <ng-container *ngFor="let anchor of anchorService.anchors | values; trackBy: trackByFn">
+      <li class="anchor-item" [class.active]="anchor.id === anchorService.activeAnchor.id" (click)="handleClick(anchor)">
+        <ng-container *ngTemplateOutlet="itemTpl; context:anchor"></ng-container>
+      </li>
+      <li class="anchor-item" *ngIf="anchor.children && anchor.children.length > 0">
+        <ul class="anchor-list sub">
+          <ng-container *ngFor="let child of anchor.children; trackBy: trackByFn">
+            <li class="anchor-item" [class.active]="child.id === anchorService.activeAnchor.id" (click)="handleClick(child)">
+              <ng-container *ngTemplateOutlet=" itemTpl; context:child "></ng-container>
+            </li>
+          </ng-container>
+        </ul>
+      </li>
+    </ng-container>
   </ul>
 </div>

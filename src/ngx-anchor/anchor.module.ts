@@ -5,6 +5,7 @@ import { AnchorDirective } from './anchor.directive'
 import { AnchorService } from './anchor.service'
 import { SCROLL_CONFIG } from './config'
 import { AnchorScrollConfig } from './model'
+import { ValuesPipe } from './values.pipe'
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import { AnchorScrollConfig } from './model'
   ],
   declarations: [
     NavigatorComponent,
-    AnchorDirective
+    AnchorDirective,
+    ValuesPipe
   ],
   exports: [
     NavigatorComponent,

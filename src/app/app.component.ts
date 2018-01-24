@@ -11,7 +11,22 @@ export class AppComponent {
 
   constructor() {
     for (let i = 1; i <= 10; i++) {
-      this.contents.push(i)
+      if (i % 2 === 0) {
+        this.contents.push({
+          id: i,
+          children: [1, 2, 3].map(idx => {
+            return {
+              id: idx,
+              height: 30 * Math.random() + 'vh'
+            }
+          })
+        })
+      } else {
+        this.contents.push({
+          id: i,
+          children: []
+        })
+      }
     }
   }
 }

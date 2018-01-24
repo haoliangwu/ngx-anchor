@@ -1,6 +1,6 @@
 import { Injectable, Inject, InjectionToken } from '@angular/core'
 import { Anchor, AnchorScrollConfig } from './model'
-import { getElementViewTop, closestScrollableElement, isScrollToBottom } from '../utils/dom'
+import { getElementViewTop, closestScrollableElement, isScrollToBottom, isScrollToTop } from '../utils/dom'
 import { scrollTo } from '../utils/scroll'
 
 import { Observable } from 'rxjs/Observable'
@@ -8,7 +8,7 @@ import { fromEvent } from 'rxjs/observable/fromEvent'
 import { of } from 'rxjs/observable/of'
 import { never } from 'rxjs/observable/never'
 import { from } from 'rxjs/observable/from'
-import { debounceTime, flatMap, tap, map, bufferCount, switchMap, distinctUntilChanged } from 'rxjs/operators'
+import { flatMap, tap, map, bufferCount, switchMap, distinctUntilChanged, throttleTime } from 'rxjs/operators'
 import { SCROLL_CONFIG } from './config'
 
 @Injectable()
@@ -16,7 +16,7 @@ export class AnchorService {
   private uniqId = 1
   private enable = true
   public scrollOptions: AnchorScrollConfig
-  anchors: Anchor[] = []
+  anchors: { [groupName: string]: Anchor } = {}
   activeAnchor: Anchor
 
   constructor(
@@ -25,18 +25,26 @@ export class AnchorService {
     this.scrollOptions = scrollOptions
   }
 
-  registerAnchor(el: HTMLElement) {
+  registerAnchor(el: HTMLElement, group: string, isHeader = false) {
     const id = this.uniqId++
+
     const anchor = {
       id: id,
       el: el
     }
 
+    if (isHeader) {
+      this.anchors[group] = {
+        ...anchor,
+        children: []
+      }
+    } else {
+      this.anchors[group].children.push(anchor)
+    }
+
     if (!this.activeAnchor) {
       this.activeAnchor = anchor
     }
-
-    this.anchors.push(anchor)
   }
 
   isAnchorInView(top: number) {
@@ -74,41 +82,60 @@ export class AnchorService {
 
     return fromEvent(el, 'scroll').pipe(
       toggle$,
+      throttleTime(10),
       distinctUntilChanged(),
-      map(event => {
-        const length = this.anchors.length
+      map(() => {
+        const anchors = Object.values(this.anchors)
+
+        // 如果滚动到最顶端 则直接返回第一个 anchor
+        if (isScrollToTop()) {
+          return anchors[0]
+        }
 
         // 如果滚动到最底端 则直接返回最后一个 anchor
         if (isScrollToBottom()) {
-          return this.anchors[this.anchors.length - 1]
+          return this.findDeepestAnchor(anchors[anchors.length - 1])
         }
 
-        let anchor: Anchor = null
-
-        for (let i = 0; i < this.anchors.length; i++) {
-          anchor = this.anchors[i]
-
-          const top = getElementViewTop(anchor.el)
-          const clientHeight = anchor.el.clientHeight
-
-          // 如果 anchor 可见
-          if (this.isAnchorInView(top)) {
-            // 如果 anchor 距窗口顶部距离大于 sensitivity，则返回上一条 anchor
-            if (!this.isAnchorActive(top, clientHeight)) {
-              anchor = this.anchors[i - 1]
-            }
-
-            // 反之 返回当前 anchor
-            break
-          }
-        }
-
-        return anchor
+        return this.findActiveAnchor(anchors)
       }),
       tap(activeAnchor => {
         this.activeAnchor = activeAnchor
       })
     )
+  }
+
+  private findActiveAnchor(anchors: Anchor[] = []): Anchor {
+    let anchor: Anchor = null
+
+    for (let i = 0; i < anchors.length; i++) {
+      anchor = anchors[i]
+
+      const top = getElementViewTop(anchor.el)
+      const clientHeight = anchor.el.clientHeight
+
+      // 如果 anchor 可见
+      if (this.isAnchorInView(top)) {
+        // 如果 anchor 距窗口顶部距离大于 sensitivity，则返回上一条 anchor
+        if (!this.isAnchorActive(top, clientHeight)) {
+          anchor = i === 0 ? anchor : this.findDeepestAnchor(anchors[i - 1])
+        }
+      } else {
+        anchor = this.findActiveAnchor(anchor.children)
+      }
+
+      if (!!anchor) break
+    }
+
+    return anchor
+  }
+
+  private findDeepestAnchor(anchor: Anchor): Anchor {
+    if (anchor.children && anchor.children.length > 0) {
+      return this.findDeepestAnchor(anchor.children[anchor.children.length - 1])
+    } else {
+      return anchor
+    }
   }
 
   private toggleListner(status: boolean) {

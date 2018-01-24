@@ -1,9 +1,15 @@
 <div nz-row [nzType]="'flex'">
   <div nz-col [nzSpan]="18" class="page-wrapper">
     <ng-container *ngFor="let content of contents; index as i;">
-      <h1 ngxAnchor>main title{{i+1}}</h1>
-      <section class="whole-page">
-        long content{{i+1}}
+      <h1 [ngxAnchor]="content.id" [header]="true">main title{{content.id}}</h1>
+      <section>
+        long content{{content.id}}
+        <ng-container *ngFor="let child of content.children; index as j;">
+          <h2 [ngxAnchor]="content.id">sub main title{{child.id}}</h2>
+          <section [style.height]="child.height">
+            long sub content{{child.id}}
+          </section>
+        </ng-container>
       </section>
     </ng-container>
   </div>
