@@ -105,15 +105,11 @@ export class AnchorService {
     )
   }
 
-  private findActiveAnchor(anchors: Anchor[] = []): Anchor {
+  private findActiveAnchor(anchors: Array<Anchor | string> = []): Anchor {
     let anchor: Anchor = null
 
     for (let i = 0; i < anchors.length; i++) {
-      anchor = anchors[i]
-
-      if (!(anchor instanceof Object)) {
-        anchor = this.anchors[anchor as string]
-      }
+      anchor = this.getAnchor(anchors[i])
 
       const top = getElementViewTop(anchor.el)
 
@@ -133,11 +129,21 @@ export class AnchorService {
     return anchor
   }
 
-  private findDeepestAnchor(anchor: Anchor): Anchor {
+  private findDeepestAnchor(anchor: Anchor | string): Anchor {
+    anchor = this.getAnchor(anchor)
+
     if (anchor.children && anchor.children.length > 0) {
       return this.findDeepestAnchor(anchor.children[anchor.children.length - 1])
     } else {
       return anchor
+    }
+  }
+
+  private getAnchor(anchor: Anchor | string) {
+    if (!(anchor instanceof Object)) {
+      return this.anchors[anchor as string]
+    } else {
+      return anchor as Anchor
     }
   }
 
