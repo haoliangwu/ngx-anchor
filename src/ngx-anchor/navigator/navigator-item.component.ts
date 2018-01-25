@@ -8,7 +8,7 @@ import { AnchorService } from '../anchor.service'
   templateUrl: './navigator-item.component.html'
 })
 export class NavigatorItemComponent implements OnInit {
-  @Input() anchors: Anchor[]
+  @Input() anchor: Anchor
   @Input() itemTpl: TemplateRef<Anchor>
   @Input() sub: boolean
 

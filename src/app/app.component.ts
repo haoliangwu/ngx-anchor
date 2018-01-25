@@ -11,21 +11,18 @@ export class AppComponent {
 
   constructor() {
     for (let i = 1; i <= 10; i++) {
-      if (i === 2) {
+      if (i % 2 === 0) {
         this.contents.push({
-          id: i,
-          text: i + 'foo',
+          id: `${i}`,
           children: [1, 2, 3].map(idx => {
             const height = 30 * Math.random()
 
             return {
-              id: idx,
-              text: i + 'bar',
+              id: `${i}-${idx}`,
               height: height + 'vh',
               children: i === 2 ? [4].map(idx2 => {
                 return {
-                  id: idx2,
-                  text: i + 'zoo',
+                  id: `${i}-${idx}-${idx2}`,
                   height: '30px',
                   children: []
                 }

@@ -1,5 +1,5 @@
 import { Injectable, Inject, InjectionToken } from '@angular/core'
-import { Anchor, AnchorScrollConfig } from './model'
+import { Anchor, AnchorScrollConfig, AnchorRegistry } from './model'
 import { getElementViewTop, closestScrollableElement, isScrollToBottom, isScrollToTop } from '../utils/dom'
 import { scrollTo } from '../utils/scroll'
 
@@ -13,10 +13,10 @@ import { SCROLL_CONFIG } from './config'
 
 @Injectable()
 export class AnchorService {
-  private uniqId = 1
+  private uuid = 1
   private enable = true
   public scrollOptions: AnchorScrollConfig
-  anchors: { [groupName: string]: Anchor } = {}
+  anchors: AnchorRegistry = {}
   activeAnchor: Anchor
 
   constructor(
@@ -25,25 +25,25 @@ export class AnchorService {
     this.scrollOptions = scrollOptions
   }
 
-  registerAnchor(el: HTMLElement, group: string, isHeader = false) {
-    const id = this.uniqId++
+  registerAnchor(el: HTMLElement, { id, parent }) {
+    const uuid = this.uuid++
 
     const anchor = {
-      id: id,
-      el: el
-    }
-
-    if (isHeader) {
-      this.anchors[group] = {
-        ...anchor,
-        children: []
-      }
-    } else {
-      this.anchors[group].children.push(anchor)
+      uuid,
+      id: id as string,
+      parent: parent as string,
+      el: el,
+      children: []
     }
 
     if (!this.activeAnchor) {
       this.activeAnchor = anchor
+    }
+
+    this.anchors[id] = anchor
+
+    if (!!parent && this.anchors[parent]) {
+      this.anchors[parent].children.push(id)
     }
   }
 
@@ -51,10 +51,10 @@ export class AnchorService {
     return top >= 0 && top <= document.documentElement.clientHeight
   }
 
-  isAnchorActive(top: number, height: number) {
+  isAnchorActive(top: number) {
     const { sensitivity } = this.scrollOptions
 
-    return top >= 0 && top <= height + sensitivity
+    return top >= 0 && top <= sensitivity
   }
 
   scrollToAnchor(anchor: Anchor, scrollOptions?: AnchorScrollConfig) {
@@ -111,13 +111,16 @@ export class AnchorService {
     for (let i = 0; i < anchors.length; i++) {
       anchor = anchors[i]
 
+      if (!(anchor instanceof Object)) {
+        anchor = this.anchors[anchor as string]
+      }
+
       const top = getElementViewTop(anchor.el)
-      const clientHeight = anchor.el.clientHeight
 
       // 如果 anchor 可见
       if (this.isAnchorInView(top)) {
         // 如果 anchor 距窗口顶部距离大于 sensitivity，则返回上一条 anchor
-        if (!this.isAnchorActive(top, clientHeight)) {
+        if (!this.isAnchorActive(top)) {
           anchor = i === 0 ? anchor : this.findDeepestAnchor(anchors[i - 1])
         }
       } else {

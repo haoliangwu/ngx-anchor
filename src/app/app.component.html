@@ -2,14 +2,14 @@
   <div nz-col [nzSpan]="18" class="page-wrapper">
     <ng-container *ngFor="let content of contents">
       <h1 [ngxAnchor]="content.id" [header]="true">main title{{content.id}}</h1>
-      <section>
+      <section [ngxWithAnchor]="content.id">
         long content{{content.id}}
         <ng-container *ngFor="let child of content.children">
-          <h2 [ngxAnchor]="content.id">sub main title{{child.id}}</h2>
-          <section [style.height]="child.height">
+          <h2 [ngxAnchor]="child.id">sub main title{{child.id}}</h2>
+          <section [ngxWithAnchor]="child.id" [style.height]="child.height">
             long sub content{{child.id}}
             <ng-container *ngFor="let child2 of child.children">
-              <h2 [ngxAnchor]="content.id">sub2 main title{{child2.id}}</h2>
+              <h2 [ngxAnchor]="child2.id">sub2 main title{{child2.id}}</h2>
               <section [style.height]="child2.height">
                 long sub2 content{{child2.id}}
               </section>
