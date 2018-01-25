@@ -1,27 +1,89 @@
-# PageNavigator
+# ngx-anchor
+angular 4+ custom anchor components. [DEMO][demo]
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.2.
+## todos
+* [x] custom anchor mark directive
+* [x] build-in anchor navigator
+* [x] mult anchor level support
+* [x] custom animation options
+* [ ] ember layout support
+* [ ] events hook
+* [ ] public navigator service
 
-## Development server
+## installing and usage
+> ``npm install ngx-anchor --save``
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### load module in app module (with or without global configuration)
 
-## Code scaffolding
+```
+// without configuration
+imports: [
+  ...
+  NgxAnchorModule.forRoot(),
+  ...
+]
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+// with configuration
+imports: [
+  ...
+  NgxAnchorModule.forRoot({
+    duration: 1000,
+    step: 10,
+    sensitivity: 36
+  }),
+  ...
+]
+```
 
-## Build
+### configuration
+* ``duration``(number): scroll animation total duration distance
+* ``step``(number): the step per requestAnimationFrame
+* ``sensitivity``(number): the offset which affects anchor navigator auto-active when trigger scroll events, default is 12px
+* ``timeFunc``: scroll animation time function used, signature is 
+```
+funciton timeFunc(step: number, start: number, change: number, duration: number) => number
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+## directives
+### ``ngxAnchor``
+custom anchor mark
 
-## Running unit tests
+* ``ngxAnchor``(string): anchor custom id
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+example:
+```
+<h1 [ngxAnchor]="foo">main title{{foo}}</h1>
+```
 
-## Running end-to-end tests
+### ``ngxWithAnchor``
+parent anchor mark
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+* ``ngxWithAnchor``(string): parent anchor id
 
-## Further help
+example:
+```
+<h1 [ngxAnchor]="foo" [header]="true">main title{{foo}}</h1>
+<section [ngxWithAnchor]="foo">
+  <h2 [ngxAnchor]="bar">sub main title{{bar}}</h2>
+</section>
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## components
+### ``ngx-anchor-nav``
+build-in anchor navigator
+
+* ``anchorTpl``(TemplateRef)
+
+example:
+```
+<ngx-anchor-nav>
+  <ng-template #anchorTpl let-index="id">
+    <span>{{index}}</span>
+  </ng-template>
+</ngx-anchor-nav>
+```
+
+## services(WIP)
+
+
+[demo]: http://littlelyon.com/ngx-anchor/
