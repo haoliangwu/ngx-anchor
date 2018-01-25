@@ -61,5 +61,16 @@
     "tslint": "~5.7.0",
     "typescript": "~2.4.2",
     "uglifyjs": "^2.4.11"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/haoliangwu/ngx-anchor"
+  },
+  "bugs": {
+    "url": "https://github.com/haoliangwu/ngx-anchor/issues"
+  },
+  "author": {
+    "name": "haoliangwu",
+    "url": "https://github.com/haoliangwu"
   }
 }
