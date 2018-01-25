@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build": "./build.sh"
+    "build": "./build.sh",
+    "deploy:doc": "ng build --prod --deploy-url http://littlelyon.com/ngx-anchor/ && gulp deploy"
   },
   "main": "./lib/ngx-anchor.umd.js",
   "module": "./lib/index.js",
