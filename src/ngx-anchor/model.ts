@@ -1,4 +1,5 @@
 export interface Anchor {
+  uuid: number,
   id: string,
   el: HTMLElement,
   text?: string,
