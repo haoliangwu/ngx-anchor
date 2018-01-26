@@ -4,10 +4,17 @@ export interface Anchor {
   el: HTMLElement,
   text?: string,
   parent?: string,
-  children?: Anchor[]
+  children?: string[]
 }
 
-export interface AnchorRegistry { [id: string]: Anchor }
+export interface AnchorRegistry {
+  [id: string]: Anchor
+}
+
+export interface AnchorRelConstriant {
+  id: string,
+  parent: string
+}
 
 export type animationFunc = (step: number, start: number, change: number, duration: number) => number
 

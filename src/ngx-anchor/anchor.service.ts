@@ -1,5 +1,5 @@
 import { Injectable, Inject, InjectionToken } from '@angular/core'
-import { Anchor, AnchorScrollConfig, AnchorRegistry } from './model'
+import { Anchor, AnchorScrollConfig, AnchorRegistry, AnchorRelConstriant } from './model'
 import { getElementViewTop, closestScrollableElement, isScrollToBottom, isScrollToTop } from '../utils/dom'
 import { scrollTo } from '../utils/scroll'
 
@@ -10,6 +10,8 @@ import { never } from 'rxjs/observable/never'
 import { from } from 'rxjs/observable/from'
 import { flatMap, tap, map, bufferCount, switchMap, distinctUntilChanged, throttleTime } from 'rxjs/operators'
 import { SCROLL_CONFIG } from './config'
+
+import * as isplainobject from 'lodash.isplainobject'
 
 @Injectable()
 export class AnchorService {
@@ -25,16 +27,27 @@ export class AnchorService {
     this.scrollOptions = scrollOptions
   }
 
-  registerAnchor(el: HTMLElement, { id, parent }) {
-    const uuid = this.uuid++
-
-    const anchor = {
-      uuid,
-      id: id as string,
-      parent: parent as string,
+  anchorFactory(el: HTMLElement, constraint: AnchorRelConstriant): Anchor {
+    return {
+      uuid: this.uuid++,
       el: el,
-      children: []
+      children: [],
+      ...constraint
     }
+  }
+
+  get(anchor: Anchor | string) {
+    if (isplainobject(anchor)) {
+      return anchor as Anchor
+    } else {
+      return this.anchors[anchor as string]
+    }
+  }
+
+  register(el: HTMLElement, constraint: AnchorRelConstriant) {
+    const { id, parent } = constraint
+
+    const anchor = this.anchorFactory(el, constraint)
 
     if (!this.activeAnchor) {
       this.activeAnchor = anchor
@@ -47,17 +60,17 @@ export class AnchorService {
     }
   }
 
-  isAnchorInView(top: number) {
-    return top >= 0 && top <= document.documentElement.clientHeight
+  scrollPrevious() {
+
   }
 
-  isAnchorActive(top: number) {
-    const { sensitivity } = this.scrollOptions
+  scrollNext() {
 
-    return top >= 0 && top <= sensitivity
   }
 
-  scrollToAnchor(anchor: Anchor, scrollOptions?: AnchorScrollConfig) {
+  scrollTo(anchor: Anchor | string, scrollOptions?: AnchorScrollConfig) {
+    anchor = this.get(anchor)
+
     this.toggleListner(false)
 
     const scrollElement = closestScrollableElement(anchor.el)
@@ -109,7 +122,7 @@ export class AnchorService {
     let anchor: Anchor = null
 
     for (let i = 0; i < anchors.length; i++) {
-      anchor = this.getAnchor(anchors[i])
+      anchor = this.get(anchors[i])
 
       const top = getElementViewTop(anchor.el)
 
@@ -130,7 +143,7 @@ export class AnchorService {
   }
 
   private findDeepestAnchor(anchor: Anchor | string): Anchor {
-    anchor = this.getAnchor(anchor)
+    anchor = this.get(anchor)
 
     if (anchor.children && anchor.children.length > 0) {
       return this.findDeepestAnchor(anchor.children[anchor.children.length - 1])
@@ -139,15 +152,15 @@ export class AnchorService {
     }
   }
 
-  private getAnchor(anchor: Anchor | string) {
-    if (!(anchor instanceof Object)) {
-      return this.anchors[anchor as string]
-    } else {
-      return anchor as Anchor
-    }
-  }
-
   private toggleListner(status: boolean) {
     this.enable = status
+  }
+
+  private isAnchorInView(top: number) {
+    return top >= 0 && top <= document.documentElement.clientHeight
+  }
+
+  private isAnchorActive(top: number) {
+    return top >= 0 && top <= this.scrollOptions.sensitivity
   }
 }

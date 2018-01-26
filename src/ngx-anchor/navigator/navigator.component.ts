@@ -35,6 +35,6 @@ export class NavigatorComponent implements OnInit, OnDestroy {
   }
 
   handleClick(anchor: Anchor) {
-    this.anchorService.scrollToAnchor(anchor)
+    this.anchorService.scrollTo(anchor)
   }
 }

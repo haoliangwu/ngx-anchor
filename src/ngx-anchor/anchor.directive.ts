@@ -26,7 +26,7 @@ export class AnchorDirective implements OnInit {
     //   this.anchorService.registerAnchor(el, this.group)
     // }
 
-      this.anchorService.registerAnchor(el, {
+      this.anchorService.register(el, {
         id: this.id as string,
         parent: !!this.withAnchor ? this.withAnchor.id : null
       })

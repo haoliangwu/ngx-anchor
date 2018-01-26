@@ -1,31 +1,49 @@
-<div nz-row [nzType]="'flex'">
-  <div nz-col [nzSpan]="18" class="page-wrapper">
-    <ng-container *ngFor="let content of contents">
-      <h1 [ngxAnchor]="content.id" [header]="true">main title{{content.id}}</h1>
-      <section [ngxWithAnchor]="content.id">
-        long content{{content.id}}
-        <ng-container *ngFor="let child of content.children">
-          <h2 [ngxAnchor]="child.id">sub main title{{child.id}}</h2>
-          <section [ngxWithAnchor]="child.id" [style.height]="child.height">
-            long sub content{{child.id}}
-            <ng-container *ngFor="let child2 of child.children">
-              <h2 [ngxAnchor]="child2.id">sub2 main title{{child2.id}}</h2>
-              <section [style.height]="child2.height">
-                long sub2 content{{child2.id}}
+<nz-layout class="layout">
+  <nz-content style="padding:0 50px;">
+    <div nz-row [nzType]="'flex'">
+      <div nz-col [nzSpan]="8" [nzOffset]="8">
+        <nz-affix>
+          <div style="padding: 1em;">
+            <nz-radio-group>
+              <label nz-radio-button (click)="previous()">
+                <span>previous</span>
+              </label>
+              <label nz-radio-button (click)="next()">
+                <span>next</span>
+              </label>
+            </nz-radio-group>
+          </div>
+        </nz-affix>
+      </div>
+    </div>
+    <div nz-row [nzType]="'flex'">
+      <div nz-col [nzSpan]="18" class="page-wrapper">
+        <ng-container *ngFor="let content of contents">
+          <h1 [ngxAnchor]="content.id" [header]="true">main title{{content.id}}</h1>
+          <section [ngxWithAnchor]="content.id">
+            long content{{content.id}}
+            <ng-container *ngFor="let child of content.children">
+              <h2 [ngxAnchor]="child.id">sub main title{{child.id}}</h2>
+              <section [ngxWithAnchor]="child.id" [style.minHeight]="child.height">
+                long sub content{{child.id}}
+                <ng-container *ngFor="let child2 of child.children">
+                  <h2 [ngxAnchor]="child2.id">sub2 main title{{child2.id}}</h2>
+                  <section [style.height]="child2.height">
+                    long sub2 content{{child2.id}}
+                  </section>
+                </ng-container>
               </section>
             </ng-container>
           </section>
         </ng-container>
-      </section>
-    </ng-container>
-  </div>
-  <div nz-col [nzSpan]="6">
-    <nz-affix>
-      <ngx-anchor-nav>
-        <ng-template #anchorTpl let-index="id">
-          <span>{{index}}</span>
-        </ng-template>
-      </ngx-anchor-nav>
-    </nz-affix>
-  </div>
-</div>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <ngx-anchor-nav style="position: fixed;">
+          <ng-template #anchorTpl let-index="id">
+            <span>{{index}}</span>
+          </ng-template>
+        </ngx-anchor-nav>
+      </div>
+    </div>
+  </nz-content>
+</nz-layout>
