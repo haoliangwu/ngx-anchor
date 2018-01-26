@@ -87,7 +87,7 @@ example:
 #### property
 * ``anchors``( { [id: string]: anchor: Anchor} ): all regisitry custom anchor instance
 * ``activeAnchor``(Anchor): current active anchor instance
-* ``scrollEvents``(Observable<Anchor>): current active anchor Observable
+* ``scrollEvents``(Observable): current active anchor Observable
 
 #### method
 ```

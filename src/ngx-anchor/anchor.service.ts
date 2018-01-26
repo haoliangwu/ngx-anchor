@@ -11,20 +11,29 @@ import { from } from 'rxjs/observable/from'
 import { flatMap, tap, map, bufferCount, switchMap, distinctUntilChanged, throttleTime } from 'rxjs/operators'
 import { SCROLL_CONFIG } from './config'
 
-import { Subject } from 'rxjs/Subject'
+import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 
 @Injectable()
 export class AnchorService {
   private uuid = 1
   private enable = true
-  private scroll$ = new Subject<ScrollEvent>()
+  private scroll$ = new BehaviorSubject<ScrollEvent>({ anchor: null })
   private scrollOptions: AnchorScrollConfig
+  private _activeAnchor: Anchor
 
   anchors: AnchorRegistry = {}
-  activeAnchor: Anchor
 
-  get scrollEvents(): Subject<ScrollEvent> {
-    return this.scroll$
+  get scrollEvents(): Observable<ScrollEvent> {
+    return this.scroll$.pipe(distinctUntilChanged((x, y) => x.anchor.uuid === y.anchor.uuid))
+  }
+
+  get activeAnchor() {
+    return this._activeAnchor
+  }
+
+  set activeAnchor(anchor: Anchor) {
+    this._activeAnchor = anchor
+    this.scroll$.next({ anchor })
   }
 
   constructor(
@@ -85,7 +94,7 @@ export class AnchorService {
       this.toggleListner(true)
 
       // trigger scroll event manually
-      this.scroll$.next({ anchor: this.activeAnchor })
+      // this.scroll$.next({ anchor: this.activeAnchor })
     })
 
     this.activeAnchor = anchor
@@ -121,7 +130,6 @@ export class AnchorService {
         return activeAnchor
       }),
       tap(activeAnchor => {
-        this.scroll$.next({ anchor: activeAnchor })
         this.activeAnchor = activeAnchor
       })
     )

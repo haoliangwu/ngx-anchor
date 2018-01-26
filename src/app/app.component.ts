@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core'
 import { AnchorService } from '../ngx-anchor/anchor.service'
 import { map } from 'rxjs/operators'
-import { Observable } from 'rxjs/Observable';
-import { Anchor } from '../ngx-anchor/model';
+import { Observable } from 'rxjs/Observable'
+import { Anchor } from '../ngx-anchor/model'
+import { tap } from 'rxjs/operators/tap'
 
 @Component({
   selector: 'ngx-anchor-root',
@@ -46,6 +47,9 @@ export class AppComponent implements OnInit {
     }
 
     this.activeAnchorIds$ = this.anchorService.scrollEvents.pipe(
+      tap(e => {
+        console.log(e)
+      }),
       map(e => e.anchor.id)
     )
   }
