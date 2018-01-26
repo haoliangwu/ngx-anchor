@@ -1,7 +1,7 @@
 import { Injectable, Inject, InjectionToken } from '@angular/core'
-import { Anchor, AnchorScrollConfig, AnchorRegistry, AnchorRelConstriant } from './model'
+import { Anchor, AnchorScrollConfig, AnchorRegistry, AnchorRelConstriant, ScrollEvent } from './model'
 import { getElementViewTop, closestScrollableElement, isScrollToBottom, isScrollToTop } from '../utils/dom'
-import { scrollTo } from '../utils/scroll'
+import { scrollTo as _scrollTo } from '../utils/scroll'
 
 import { Observable } from 'rxjs/Observable'
 import { fromEvent } from 'rxjs/observable/fromEvent'
@@ -12,14 +12,20 @@ import { flatMap, tap, map, bufferCount, switchMap, distinctUntilChanged, thrott
 import { SCROLL_CONFIG } from './config'
 
 import * as isplainobject from 'lodash.isplainobject'
+import { Subject } from 'rxjs/Subject'
 
 @Injectable()
 export class AnchorService {
   private uuid = 1
   private enable = true
+  private scroll$ = new Subject<ScrollEvent>()
   public scrollOptions: AnchorScrollConfig
   anchors: AnchorRegistry = {}
   activeAnchor: Anchor
+
+  get scrollEvents(): Subject<ScrollEvent> {
+    return this.scroll$
+  }
 
   constructor(
     @Inject(SCROLL_CONFIG) scrollOptions
@@ -60,14 +66,6 @@ export class AnchorService {
     }
   }
 
-  scrollPrevious() {
-
-  }
-
-  scrollNext() {
-
-  }
-
   scrollTo(anchor: Anchor | string, scrollOptions?: AnchorScrollConfig) {
     anchor = this.get(anchor)
 
@@ -78,13 +76,16 @@ export class AnchorService {
     const scrollTop = scrollElement.scrollTop
     const scrollOffset = getElementViewTop(anchor.el)
 
-    scrollTo(scrollElement, {
+    _scrollTo(scrollElement, {
       start: scrollTop,
       change: scrollOffset,
       ...this.scrollOptions,
       ...scrollOptions
     }, () => {
       this.toggleListner(true)
+
+      // trigger scroll event manually
+      this.scroll$.next({ anchor: this.activeAnchor })
     })
 
     this.activeAnchor = anchor
@@ -99,20 +100,28 @@ export class AnchorService {
       distinctUntilChanged(),
       map(() => {
         const anchors = Object.values(this.anchors)
+        let activeAnchor
 
         // 如果滚动到最顶端 则直接返回第一个 anchor
         if (isScrollToTop()) {
-          return anchors[0]
+          activeAnchor = anchors[0]
+
+          return activeAnchor
         }
 
         // 如果滚动到最底端 则直接返回最后一个 anchor
         if (isScrollToBottom()) {
-          return this.findDeepestAnchor(anchors[anchors.length - 1])
+          activeAnchor = this.findDeepestAnchor(anchors[anchors.length - 1])
+
+          return activeAnchor
         }
 
-        return this.findActiveAnchor(anchors)
+        activeAnchor = this.findActiveAnchor(anchors)
+
+        return activeAnchor
       }),
       tap(activeAnchor => {
+        this.scroll$.next({ anchor: activeAnchor })
         this.activeAnchor = activeAnchor
       })
     )

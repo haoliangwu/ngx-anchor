@@ -4,14 +4,25 @@
       <div nz-col [nzSpan]="8" [nzOffset]="8">
         <nz-affix>
           <div style="padding: 1em;">
+            <h5>use
+              <code>anchorService.scrollTo()</code> to navigate
+            </h5>
             <nz-radio-group>
-              <label nz-radio-button (click)="previous()">
-                <span>previous</span>
+              <label nz-radio-button (click)="scrollTo('1')">
+                <span>scroll to fisrt item</span>
               </label>
-              <label nz-radio-button (click)="next()">
-                <span>next</span>
+              <label nz-radio-button (click)="scrollTo('8-3')">
+                <span>scroll to last item</span>
               </label>
             </nz-radio-group>
+            <h5>use
+              <code>anchorService.activeAnchor</code>
+            </h5>
+            <p>active anchor: {{anchorService.activeAnchor.id}}</p>
+            <h5>use
+              <code>scrollEvents observable</code>
+            </h5>
+            <p>active anchor: {{this.activeAnchorIds$ | async}}</p>
           </div>
         </nz-affix>
       </div>

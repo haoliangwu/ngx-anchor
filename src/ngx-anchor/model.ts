@@ -24,3 +24,7 @@ export interface AnchorScrollConfig {
   sensitivity?: number,
   timeFunc?: animationFunc
 }
+
+export interface ScrollEvent {
+  anchor: Anchor
+}

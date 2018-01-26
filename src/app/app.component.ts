@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { AnchorService } from '../ngx-anchor/anchor.service'
+import { map } from 'rxjs/operators'
+import { Observable } from 'rxjs/Observable';
+import { Anchor } from '../ngx-anchor/model';
 
 @Component({
   selector: 'ngx-anchor-root',
@@ -9,6 +12,7 @@ import { AnchorService } from '../ngx-anchor/anchor.service'
 export class AppComponent implements OnInit {
   title = 'app'
   contents = []
+  activeAnchorIds$: Observable<string>
 
   constructor(
     public anchorService: AnchorService
@@ -40,18 +44,14 @@ export class AppComponent implements OnInit {
         })
       }
     }
+
+    this.activeAnchorIds$ = this.anchorService.scrollEvents.pipe(
+      map(e => e.anchor.id)
+    )
   }
 
   scrollTo(id: string) {
-    this.anchorService.scrollToAnchor(id)
-  }
-
-  previous() {
-
-  }
-
-  next() {
-
+    this.anchorService.scrollTo(id)
   }
 
   private randomHeight() {

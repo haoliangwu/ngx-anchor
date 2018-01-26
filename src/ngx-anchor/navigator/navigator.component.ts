@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy, TemplateRef, ContentChild, ElementRef } from '@angular/core'
+import { Component, OnInit, ViewEncapsulation, OnDestroy, TemplateRef, ContentChild, ElementRef, Input, Output, EventEmitter } from '@angular/core'
 import { AnchorService } from '../anchor.service'
 import { getElementViewTop, isScrollToBottom } from '../../utils/dom'
 import { Anchor } from '../model'

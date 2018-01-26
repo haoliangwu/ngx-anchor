@@ -12,7 +12,7 @@ export class NavigatorItemComponent implements OnInit {
   @Input() itemTpl: TemplateRef<Anchor>
   @Input() sub: boolean
 
-  @Output() clickRquest: EventEmitter<Anchor> = new EventEmitter<Anchor>()
+  @Output() clickRquest = new EventEmitter<Anchor>()
 
   constructor(
     public anchorService: AnchorService
