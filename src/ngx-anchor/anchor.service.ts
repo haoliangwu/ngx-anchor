@@ -11,7 +11,6 @@ import { from } from 'rxjs/observable/from'
 import { flatMap, tap, map, bufferCount, switchMap, distinctUntilChanged, throttleTime } from 'rxjs/operators'
 import { SCROLL_CONFIG } from './config'
 
-import * as isplainobject from 'lodash.isplainobject'
 import { Subject } from 'rxjs/Subject'
 
 @Injectable()
@@ -19,7 +18,8 @@ export class AnchorService {
   private uuid = 1
   private enable = true
   private scroll$ = new Subject<ScrollEvent>()
-  public scrollOptions: AnchorScrollConfig
+  private scrollOptions: AnchorScrollConfig
+
   anchors: AnchorRegistry = {}
   activeAnchor: Anchor
 
@@ -42,11 +42,11 @@ export class AnchorService {
     }
   }
 
-  get(anchor: Anchor | string) {
-    if (isplainobject(anchor)) {
-      return anchor as Anchor
+  get(id: string | Anchor): Anchor {
+    if (typeof id === 'string' || typeof id === 'number') {
+      return this.anchors[id]
     } else {
-      return this.anchors[anchor as string]
+      return id
     }
   }
 
@@ -91,7 +91,7 @@ export class AnchorService {
     this.activeAnchor = anchor
   }
 
-  attachListner(el: HTMLElement | Window = window) {
+  attachListner(el: HTMLElement | Window = window): Observable<Anchor> {
     const toggle$ = switchMap(event => this.enable ? of(event) : never())
 
     return fromEvent(el, 'scroll').pipe(

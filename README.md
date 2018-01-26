@@ -7,8 +7,7 @@ angular 4+ custom anchor components. [DEMO][demo]
 * [x] mult anchor level support
 * [x] custom animation options
 * [ ] ember layout support
-* [ ] events hook
-* [ ] public navigator service
+* [x] public navigator service
 
 ## installing and usage
 > ``npm install ngx-anchor --save``
@@ -83,7 +82,39 @@ example:
 </ngx-anchor-nav>
 ```
 
-## services(WIP)
+## services
+### AnchorService
+#### property
+* ``anchors``( { [id: string]: anchor: Anchor} ): all regisitry custom anchor instance
+* ``activeAnchor``(Anchor): current active anchor instance
+* ``scrollEvents``(Observable<Anchor>): current active anchor Observable
+
+#### method
+```
+anchorFactory(el: HTMLElement, constraint: AnchorRelConstriant): Anchor
+```
+anchor instance factory with el
+
+```
+get(id: string): Anchor
+```
+retrive anchor instance by id 
+
+```
+register(el: HTMLElement, constraint: AnchorRelConstriant)
+```
+register el as anchor instance
+
+```
+scrollTo(anchor: Anchor | string, scrollOptions?: AnchorScrollConfig)
+```
+scroll to some anchor instance with custom animation options
+
+```
+attachListner(el: HTMLElement | Window = window): Observable<Anchor>
+```
+attach scroll listner to container element, default is ``window``
+
 
 
 [demo]: http://littlelyon.com/ngx-anchor/
