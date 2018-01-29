@@ -1,6 +1,6 @@
 import { Directive, ElementRef, Input, Optional } from '@angular/core'
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks'
-import { getElementTop, getElementViewTop } from '../utils/dom'
+import { getElementTop, getElementViewTop } from './utils/dom'
 import { AnchorService } from './anchor.service'
 import { WithAnchorDirective } from './with-anchor.directive'
 

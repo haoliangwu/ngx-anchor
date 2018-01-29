@@ -9,7 +9,14 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build": "./build.sh",
-    "deploy:doc": "ng build --prod --deploy-url http://littlelyon.com/ngx-anchor/ && gulp deploy"
+    "deploy:doc": "ng build --prod --deploy-url http://littlelyon.com/ngx-anchor/ && gulp deploy",
+    "package": "ng-packagr -p package.json"
+  },
+  "ngPackage": {
+    "lib": {
+      "entryFile": "public_api.ts",
+      "languageLevel": [ "dom", "es2017" ]
+    }
   },
   "main": "./lib/ngx-anchor.umd.js",
   "module": "./lib/index.js",

@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgModule } from '@angular/core'
 
 import { AppComponent } from './app.component'
-import { NgxAnchorModule } from '../ngx-anchor/anchor.module'
+import { NgxAnchorModule } from './ngx-anchor/anchor.module'
 
 import { NgZorroAntdModule } from 'ng-zorro-antd'
 import { FormsModule } from '@angular/forms'

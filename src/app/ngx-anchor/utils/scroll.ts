@@ -1,5 +1,5 @@
 import { isScrollToBottom } from './dom'
-import { AnchorScrollConfig } from '../ngx-anchor/model';
+import { AnchorScrollConfig } from '../model'
 
 let scrollAnimationFrame
 

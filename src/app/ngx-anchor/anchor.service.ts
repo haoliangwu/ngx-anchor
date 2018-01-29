@@ -1,7 +1,7 @@
 import { Injectable, Inject, InjectionToken } from '@angular/core'
 import { Anchor, AnchorScrollConfig, AnchorRegistry, AnchorRelConstriant, ScrollEvent } from './model'
-import { getElementViewTop, closestScrollableElement, isScrollToBottom, isScrollToTop } from '../utils/dom'
-import { scrollTo as _scrollTo } from '../utils/scroll'
+import { getElementViewTop, closestScrollableElement, isScrollToBottom, isScrollToTop } from './utils/dom'
+import { scrollTo as _scrollTo } from './utils/scroll'
 
 import { Observable } from 'rxjs/Observable'
 import { fromEvent } from 'rxjs/observable/fromEvent'
@@ -108,7 +108,7 @@ export class AnchorService {
       throttleTime(10),
       distinctUntilChanged(),
       map(() => {
-        const anchors = Object.values(this.anchors)
+        const anchors = (<any>Object).values(this.anchors)
         let activeAnchor
 
         // 如果滚动到最顶端 则直接返回第一个 anchor

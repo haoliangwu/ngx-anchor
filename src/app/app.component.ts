@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
-import { AnchorService } from '../ngx-anchor/anchor.service'
+import { AnchorService } from './ngx-anchor/anchor.service'
 import { map } from 'rxjs/operators'
 import { Observable } from 'rxjs/Observable'
-import { Anchor } from '../ngx-anchor/model'
+import { Anchor } from './ngx-anchor/model'
 import { tap } from 'rxjs/operators/tap'
 
 @Component({

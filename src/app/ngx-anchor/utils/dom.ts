@@ -83,21 +83,16 @@ export default function closest(element, value) {
   const nodeList = value
   const singleElement = value
 
-  const isSelector = Boolean(typeof value === 'string')
-  const isFunction = Boolean(typeof value === 'function')
-  const isNodeList = Boolean(value instanceof NodeList || value instanceof Array)
-  const isElement = Boolean(value instanceof HTMLElement)
-
   function conditionFn(currentElement) {
     if (!currentElement) {
       return currentElement
-    } else if (isSelector) {
+    } else if (typeof value === 'string') {
       return matchFunction.call(currentElement, selector)
-    } else if (isNodeList) {
+    } else if (value instanceof NodeList || value instanceof Array) {
       return [...nodeList].includes(currentElement)
-    } else if (isElement) {
+    } else if (value instanceof HTMLElement) {
       return singleElement === currentElement
-    } else if (isFunction) {
+    } else if (typeof value === 'function') {
       return callback(currentElement)
     } else {
       return null

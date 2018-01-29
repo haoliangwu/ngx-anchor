@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core'
-import { AnchorRegistry } from '../model';
+import { AnchorRegistry } from '../model'
 
 @Pipe({
   name: 'values'
@@ -9,7 +9,7 @@ export class ValuesPipe implements PipeTransform {
   transform(obj: AnchorRegistry, args?: any): any {
     const values = []
 
-    for (const value of Object.values(obj)) {
+    for (const value of (<any>Object).values(obj)) {
       if (!!value.parent) continue
       else values.push(value)
     }
