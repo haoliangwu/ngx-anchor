@@ -8,7 +8,7 @@ export interface ScrollOpts extends AnchorScrollConfig {
   change: number
 }
 
-function easeOut(step: number, start: number, change: number, duration: number): number {
+export function easeOut(step: number, start: number, change: number, duration: number): number {
   return -change * (step /= duration) * (step - 2) + start
 }
 

@@ -1,7 +1,7 @@
-import { Injectable, Inject, InjectionToken } from '@angular/core'
+import { Injectable, Inject, InjectionToken, Renderer2 } from '@angular/core'
 import { Anchor, AnchorScrollConfig, AnchorRegistry, AnchorRelConstriant, ScrollEvent } from './model'
 import { getElementViewTop, closestScrollableElement, isScrollToBottom, isScrollToTop } from './utils/dom'
-import { scrollTo as _scrollTo } from './utils/scroll'
+import { ScrollOpts, easeOut } from './utils/scroll'
 
 import { Observable } from 'rxjs/Observable'
 import { fromEvent } from 'rxjs/observable/fromEvent'
@@ -20,6 +20,7 @@ export class AnchorService {
   private scroll$ = new BehaviorSubject<ScrollEvent>({ anchor: null })
   private scrollOptions: AnchorScrollConfig
   private _activeAnchor: Anchor
+  private scrollAnimationFrame: number
 
   anchors: AnchorRegistry = {}
 
@@ -75,7 +76,40 @@ export class AnchorService {
     }
   }
 
-  scrollTo(anchor: Anchor | string, scrollOptions?: AnchorScrollConfig) {
+  private handleScroll(scrollElement: HTMLElement,
+    options: ScrollOpts, callback: Function, renderer: Renderer2) {
+
+    const { start, change, duration = 300, step = 10, timeFunc = easeOut } = options
+
+    let t = 0
+
+    function doScroll() {
+      // avoid trigger repeatly when scroll bar already bound to bottom
+      if (change > 0 && isScrollToBottom(scrollElement)) {
+        callback()
+        return cancelAnimationFrame(this.scrollAnimationFrame)
+      }
+
+      if (this.scrollAnimationFrame) {
+        cancelAnimationFrame(this.scrollAnimationFrame)
+      }
+
+      renderer.setProperty(scrollElement, 'scrollTop', easeOut(t, start, change, duration))
+
+      t += step
+
+      if (t > duration) {
+        callback()
+        cancelAnimationFrame(this.scrollAnimationFrame)
+      } else {
+        this.scrollAnimationFrame = requestAnimationFrame(doScroll.bind(this))
+      }
+    }
+
+    this.scrollAnimationFrame = requestAnimationFrame(doScroll.bind(this))
+  }
+
+  scrollTo(anchor: Anchor | string, renderer: Renderer2) {
     anchor = this.get(anchor)
 
     this.toggleListner(false)
@@ -85,17 +119,16 @@ export class AnchorService {
     const scrollTop = scrollElement.scrollTop
     const scrollOffset = getElementViewTop(anchor.el)
 
-    _scrollTo(scrollElement, {
+    this.handleScroll(scrollElement, {
       start: scrollTop,
       change: scrollOffset,
-      ...this.scrollOptions,
-      ...scrollOptions
+      ...this.scrollOptions
     }, () => {
       this.toggleListner(true)
 
       // trigger scroll event manually
       // this.scroll$.next({ anchor: this.activeAnchor })
-    })
+    }, renderer)
 
     this.activeAnchor = anchor
   }

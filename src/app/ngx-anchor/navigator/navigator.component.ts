@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy, TemplateRef, ContentChild, ElementRef, Input, Output, EventEmitter } from '@angular/core'
+import { Component, OnInit, ViewEncapsulation, OnDestroy, TemplateRef, ContentChild, ElementRef, Input, Output, EventEmitter, Renderer2 } from '@angular/core'
 import { AnchorService } from '../anchor.service'
 import { getElementViewTop, isScrollToBottom } from '../utils/dom'
 import { Anchor } from '../model'
@@ -19,7 +19,8 @@ export class NavigatorComponent implements OnInit, OnDestroy {
   @ContentChild('anchorTpl', { read: TemplateRef }) itemTpl: TemplateRef<Anchor>
 
   constructor(
-    public anchorService: AnchorService
+    public anchorService: AnchorService,
+    public renderer: Renderer2
   ) { }
 
   ngOnInit() {
@@ -35,6 +36,6 @@ export class NavigatorComponent implements OnInit, OnDestroy {
   }
 
   handleClick(anchor: Anchor) {
-    this.anchorService.scrollTo(anchor)
+    this.anchorService.scrollTo(anchor, this.renderer)
   }
 }
