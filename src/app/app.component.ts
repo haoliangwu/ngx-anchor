@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Renderer2 } from '@angular/core'
 import { AnchorService } from './ngx-anchor/anchor.service'
 import { map } from 'rxjs/operators'
 import { Observable } from 'rxjs/Observable'
@@ -16,7 +16,8 @@ export class AppComponent implements OnInit {
   activeAnchorIds$: Observable<string>
 
   constructor(
-    public anchorService: AnchorService
+    public anchorService: AnchorService,
+    private renderer: Renderer2
   ) { }
 
   ngOnInit(): void {
@@ -55,7 +56,7 @@ export class AppComponent implements OnInit {
   }
 
   scrollTo(id: string) {
-    this.anchorService.scrollTo(id)
+    this.anchorService.scrollTo(id, this.renderer)
   }
 
   private randomHeight() {

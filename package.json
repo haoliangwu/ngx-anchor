@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build": "./build.sh",
-    "deploy:doc": "ng build --prod --deploy-url http://littlelyon.com/ngx-anchor/ && gulp deploy",
+    "deploy:doc": "ng build --prod --deploy-url https://haoliangwu.github.io/ngx-anchor/ && gulp deploy",
     "package": "ng-packagr -p package.json"
   },
   "ngPackage": {
